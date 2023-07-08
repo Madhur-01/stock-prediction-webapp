@@ -60,7 +60,7 @@ df_train = df_train.rename(columns={"Date":"ds","Close":"y"})
 m = Prophet()
 m.fit(df_train)
 future = m.make_future_dataframe(periods = period)
-forecaste = m.predict(future)
+forecast = m.predict(future)
 
 #Show and plot forecast
 st.subheader("Forecast Data")
