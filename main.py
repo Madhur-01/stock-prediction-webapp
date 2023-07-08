@@ -13,16 +13,16 @@ from prophet import Prophet
 from prophet.plot import plot_plotly
 from plotly import graph_objs as go
 
-START = "2016-01-01"
+START = "2015-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
 
 st.title("Stock Forecast App")
 
-stocks = ("GOOG", "AAPL","MSFT","GME")
+stocks = ('GOOG', 'AAPL', 'MSFT', 'GME')
 
 selected_stock = st.selectbox("Please select datatset for prediction", stocks)
 
-n_years = st.slider("Year of prediction :",1,5)
+n_years = st.slider("Year of prediction :",1,4)
 preriod = n_years*365
 
 @st.cache()
