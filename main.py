@@ -54,7 +54,7 @@ def plot_raw_data():
 plot_raw_data()
 
 #Predict forecast with Prophet
-df_train = data[["Data","Close"]]
+df_train = data[["Date","Close"]]
 df_train = df_train.rename(columns={"Date":"ds","Close":"y"})
 
 m = Prophet()
