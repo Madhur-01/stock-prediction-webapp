@@ -33,8 +33,11 @@ def load_data(ticker):
     return data
 
 data_load_state = st.text("Loading data....")
-data = load_data(selected_stock)
-data_load_state.text("Loading data...,done!")
+try:
+    data = load_data(selected_stock)
+    data_load_state.text("Loading data... done!")
+except Exception as e:
+    st.error(f"Error occurred while loading data: {str(e)}")
 
 st.subheader("Raw data")
 st.write(data.tail())
