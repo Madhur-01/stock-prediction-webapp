@@ -64,7 +64,7 @@ forecaste = m.predict(future)
 
 #Show and plot forecast
 st.subheader("Forecast Data")
-st.write(fotrcast.tail())
+st.write(forecast.tail())
 
 st.write(f'Forecast plot for{n_years} years')
 fig1 = plot_plotly(m,forecast)
