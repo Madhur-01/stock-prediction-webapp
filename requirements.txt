@@ -1,5 +1,5 @@
 streamlit ==1.24.0
 pystan
 prophet == 1.1.4
---upgrade yfinance
+yfinance>=0.1.63
 plotly >= 5.0.0
