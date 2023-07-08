@@ -45,7 +45,7 @@ st.write(data.tail())
 #Plotting raw data
 
 def plot_raw_data():
-    fig = go.Figue()
+    fig = go.Figure()
     fig.add_trace(go.Scatter(x=data["Data"], y = data["Open"],name = "stock_open"))
     fig.add_trace(go.Scatter(x=data["Data"], y = data["Close"],name = "stock_close"))
     fig.layout.update(title_text = "Time Series data with Rangeslider", xaxis_rangeslider_visible=True)
