@@ -46,8 +46,8 @@ st.write(data.tail())
 
 def plot_raw_data():
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=data["Data"], y = data["Open"],name = "stock_open"))
-    fig.add_trace(go.Scatter(x=data["Data"], y = data["Close"],name = "stock_close"))
+    fig.add_trace(go.Scatter(x=data["Date"], y = data["Open"],name = "stock_open"))
+    fig.add_trace(go.Scatter(x=data["Date"], y = data["Close"],name = "stock_close"))
     fig.layout.update(title_text = "Time Series data with Rangeslider", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig)
     
