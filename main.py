@@ -34,7 +34,7 @@ def load_data(ticker):
 
 data_load_state = st.text("Loading data....")
 data = load_data(selected_stock)
-data_laod_state.text("Loading data...,done!")
+data_load_state.text("Loading data...,done!")
 
 st.subheader("Raw data")
 st.write(data.tail())
