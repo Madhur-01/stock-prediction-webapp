@@ -18,7 +18,7 @@ TODAY = date.today().strftime("%Y-%m-%d")
 
 st.title("Stock Forecast App")
 
-stocks = ( 'AAPL','MSFT')
+stocks = ( 'AAPL','MSFT','twtr','FBgrx')
 
 selected_stock = st.selectbox('Select dataset for prediction', stocks)
 
