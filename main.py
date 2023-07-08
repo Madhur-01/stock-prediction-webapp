@@ -22,7 +22,7 @@ stocks = ( 'AAPL','MSFT','FBgrx','amzn','twtr')
 
 selected_stock = st.selectbox('Select dataset for prediction', stocks)
 
-n_years = st.slider('Years of prediction:',1,4)
+n_years = st.slider('Years of prediction:',1,5)
 period = n_years*365
 
 @st.cache(persist=True, allow_output_mutation=True)
