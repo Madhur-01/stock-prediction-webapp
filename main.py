@@ -91,7 +91,7 @@ if forecast_method == "LSTM":
    
     # Building and training the LSTM model
     lstm = Sequential()
-    lstm.add(LSTM(units=50, return_sequences=True,input_shape=(500,1)))
+    lstm.add(LSTM(units=10, return_sequences=True,input_shape=(500,1)))
     lstm.add(LSTM(20))
     lstm.add(Dense(10,'relu'))
     lstm.add(Dense(5,'relu'))
