@@ -148,6 +148,35 @@ else :
     fig.layout.update(title_text="ARIMA Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig)
     
+    # Generate the forecast components
+    forecast_components = model_fit.get_forecast(steps=len(df_train_arima)).summary_frame()
+    
+    # Extract the forecasted values of the components
+    trend = forecast_components['trend']
+    seasonal = forecast_components['seasonal']
+    residuals = forecast_components['resid']
+    
+    # Create a DataFrame for the forecast components
+    df_components = pd.DataFrame({'Date': df_train_arima.index, 'Trend': trend, 'Seasonal': seasonal, 'Residuals': residuals})
+    
+    # Plot the forecast components
+    fig = go.Figure()
+    
+    # Plot the trend component
+    fig.add_trace(go.Scatter(x=df_components['Date'], y=df_components['Trend'], name='Trend'))
+    
+    # Plot the seasonal component
+    fig.add_trace(go.Scatter(x=df_components['Date'], y=df_components['Seasonal'], name='Seasonal'))
+    
+    # Plot the residual component
+    fig.add_trace(go.Scatter(x=df_components['Date'], y=df_components['Residuals'], name='Residuals'))
+    
+    # Update the layout
+    fig.update_layout(title='ARIMA Forecast Components', xaxis_rangeslider_visible=True)
+    
+    # Display the plot
+    st.plotly_chart(fig)
+    
 
 
 
