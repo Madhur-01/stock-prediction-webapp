@@ -70,25 +70,25 @@ if forecast_method == "LSTM":
     df_train_lstm = df_train_lstm.rename(columns={"Date": "ds", "Close": "y"})
 
     # Scaling the data
-    #df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
 
-   # Preparing the data for LSTM input
-    X = df_train_lstm[["ds", "y"]].values
-    y = df_train_lstm["y"].values
+    # Preparing the data for LSTM input
+    X = df_train_lstm[["ds", "y_scaled"]].values
     X = np.reshape(X, (X.shape[0], X.shape[1], 1))
-    
+
     # Building and training the LSTM model
     model = Sequential()
     model.add(LSTM(units=50, return_sequences=True, input_shape=(X.shape[1], 1)))
     model.add(LSTM(units=50))
     model.add(Dense(1))
     model.compile(loss="mean_squared_error", optimizer="adam")
-    model.fit(X, y, epochs=10, batch_size=16, verbose=0)
-    
+    model.fit(X, df_train_lstm["y_scaled"], epochs=10, batch_size=16, verbose=0)
+
     # Predicting with the LSTM model
     forecast_scaled = model.predict(X)
-    forecast = forecast_scaled
-    
+    forecast = scaler.inverse_transform(forecast_scaled)
+
     # Plotting LSTM forecast
     st.subheader("LSTM Forecast")
     fig3 = go.Figure()
