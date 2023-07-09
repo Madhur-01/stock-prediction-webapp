@@ -69,7 +69,7 @@ if forecast_method == "LSTM":
     df_train_lstm = df_train_lstm.rename(columns={"Date": "ds", "Close": "y"})
 
     # Scaling the data
-    df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
+    #df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
 
     # Preparing the data for LSTM input
     X = df_train_lstm[["ds", "y"]].values
