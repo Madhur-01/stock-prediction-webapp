@@ -85,13 +85,13 @@ if forecast_method == "LSTM":
             label = df_as_np[i+window_size]
             y.append(label)
         return np.array(x), np.array(y)
-    x, y = df_to_x_y(data['Close'], 100)
+    x, y = df_to_x_y(data['Close'], 1)
   
 
    
     # Building and training the LSTM model
     lstm = Sequential()
-    lstm.add(LSTM(units=50, return_sequences=True,input_shape=(100,1)))
+    lstm.add(LSTM(units=50, return_sequences=True,input_shape=(1,1)))
     lstm.add(LSTM(20))
     lstm.add(Dense(10,'relu'))
     lstm.add(Dense(5,'relu'))
@@ -99,9 +99,10 @@ if forecast_method == "LSTM":
     lstm.compile(loss="mean_squared_error", optimizer="adam")
 
 
-    lstm.fit(x, y, epochs=100)
+    lstm.fit(x, y, epochs=1)
     # Predicting with the LSTM model
-    forecast = lstm.predict(x).flatten()
+    future = m.make_future_dataframe(periods = period)
+    forecast = lstm.predict(future).flatten()
 
     # Plotting LSTM forecast
     st.subheader("LSTM Forecast")
