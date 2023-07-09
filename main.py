@@ -99,7 +99,7 @@ if forecast_method == "LSTM":
     fig3.layout.update(title_text="LSTM Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
     
-       # Extracting components
+      # Extracting components
     trend = forecast.squeeze()
     residuals = df_train_lstm["y"] - trend
     weekly_seasonality = residuals.groupby(df_train_lstm["ds"].dt.weekday).mean()
