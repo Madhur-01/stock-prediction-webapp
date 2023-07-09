@@ -64,7 +64,7 @@ plot_raw_data()
 
 
 if forecast_method == "LSTM":
-    df_train_lstm = data[["Date","Close"]]
+    df_train_lstm = data[["Date", "Close"]]
     df_train_lstm.dropna(inplace=True)
     df_train_lstm.reset_index(drop=True, inplace=True)
     df_train_lstm = df_train_lstm.rename(columns={"Date": "ds", "Close": "y"})
