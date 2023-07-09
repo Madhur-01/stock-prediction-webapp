@@ -65,28 +65,31 @@ plot_raw_data()
 
 if forecast_method == "LSTM":
     df_train_lstm = data[["Date", "Close"]]
-    df_train_lstm = df_train_lstm.dropna().reset_index(drop=True)
+    df_train_lstm.dropna(inplace=True)
+    df_train_lstm.reset_index(drop=True, inplace=True)
     df_train_lstm = df_train_lstm.rename(columns={"Date": "ds", "Close": "y"})
 
     # Scaling the data
     scaler = MinMaxScaler(feature_range=(0, 1))
     df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
-    df_train_lstm["y_scaled"] = df_train_lstm["y_scaled"].astype(float)
-    # Preparing the data for LSTM input
-    X = df_train_lstm[["ds", "y_scaled"]].copy()
-    X["ds"] = pd.to_datetime(X["ds"])  # Convert the "ds" column to datetime
-   # X["y_scaled"] = X["y_scaled"].astype(float)  # Convert "y_scaled" to float
-    X = X.values.reshape(-1, 2, 1)
 
-     # Building and training the LSTM model
+    # Preparing the data for LSTM input
+    X = df_train_lstm[["ds", "y_scaled"]].values
+    X[:, 0] = X[:, 0].astype(str)  # Convert Timestamp objects to string
+    X = np.reshape(X, (X.shape[0], X.shape[1], 1))
+
+    # Building and training the LSTM model
     model = Sequential()
     model.add(LSTM(units=50, return_sequences=True, input_shape=(2, 1)))
     model.add(LSTM(units=50))
     model.add(Dense(1))
     model.compile(loss="mean_squared_error", optimizer="adam")
+
+    X = X.astype('float32')  # Convert X to float32 data type
     y_scaled = df_train_lstm["y_scaled"].values.astype('float32')  # Convert y_scaled to float32
 
     model.fit(X, y_scaled, epochs=10, batch_size=16, verbose=0)
+
     # Predicting with the LSTM model
     forecast_scaled = model.predict(X)
     forecast = scaler.inverse_transform(forecast_scaled)
@@ -98,6 +101,7 @@ if forecast_method == "LSTM":
     fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=forecast[:, 0], name="LSTM Forecast"))
     fig3.layout.update(title_text="LSTM Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
+
 else:
 
     #Predict forecast with Prophet
