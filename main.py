@@ -20,6 +20,7 @@ from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 import statsmodels.api as sm
 from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.arima.model import SARIMAX
 
 START = "2015-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
@@ -33,12 +34,14 @@ selected_stock = st.selectbox('Select dataset for prediction', stocks)
 n_years = st.slider('Years of prediction:',1,5)
 period = n_years*365
 
-forecast_method = st.selectbox("Select forecasting method", ["Prophet","ARIMA","LSTM"])
+forecast_method = st.selectbox("Select forecasting method", ["Prophet","ARIMA","SARIMAX","LSTM"])
 
-if forecast_method=="ARIMA" :
+if forecast_method=="ARIMA" or forecast_method=="SARIMAX" :
     p = st.number_input('Enter value of p', min_value=0, step=1)
     d = st.number_input('Enter value of d', min_value=0, step=1)
     q = st.number_input('Enter value of q', min_value=0, step=1)
+    if  forecast_method=="SARIMAX" :
+        s = st.number_input('Enter value of seasonal order', min_value=0,max_valur =12, step=1)
 
 @st.cache_data(persist=True)
 
@@ -138,9 +141,13 @@ else :
     df_train_arima.dropna(inplace=True)
     df_train_arima.reset_index(drop=True, inplace=True)
     df_train_arima = df_train_arima.rename(columns={"Date": "ds", "Close": "y"})
-
-    model = ARIMA(df_train_arima["y"], order=(p, d, q))
-    model_fit = model.fit()
+    if forecast_method=="ARIMA" :
+        model = ARIMA(df_train_arima["y"], order=(p, d, q))
+        model_fit = model.fit()
+        
+    else : 
+        model = ARIMA(df_train_arima["y"], order=(p, d, q),(p,d,q,s))
+        model_fit = model.fit()
 
     forecast = model_fit.forecast(steps=len(df_train_arima))
     st.subheader("Forecast Data")
