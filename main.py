@@ -15,7 +15,6 @@ from prophet.plot import plot_plotly
 from plotly import graph_objs as go
 import sklearn
 import tensorflow
-from sklearn.preprocessing import MinMaxScaler()
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 
@@ -71,7 +70,6 @@ if forecast_method == "LSTM":
     df_train_lstm = df_train_lstm.rename(columns={"Date": "ds", "Close": "y"})
 
     # Scaling the data
-    scaler = MinMaxScaler(feature_range=(0, 1))
     df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
 
     # Preparing the data for LSTM input
