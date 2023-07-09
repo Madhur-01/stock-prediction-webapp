@@ -105,7 +105,7 @@ if forecast_method == "LSTM":
     future_dates = pd.date_range(start=data['Date'].iloc[-1] + pd.Timedelta(days=1), periods=future_period, freq='D')
     
     # Prepare input data for future forecasting
-    future_window = data['Close'].tail(10).to_numpy().reshape(1, period, 1)
+    future_window = data['Close'].tail(period).to_numpy().reshape(1, period, 1)
     
     # Use LSTM model to forecast future stock values
     forecast = lstm.predict(future_window).flatten()
