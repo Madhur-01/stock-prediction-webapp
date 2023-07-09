@@ -85,7 +85,7 @@ if forecast_method == "LSTM":
             label = df_as_np[i+window_size]
             y.append(label)
         return np.array(x), np.array(y)
-    x, y = df_to_x_y(df['Close'], 500)
+    x, y = df_to_x_y(data['Close'], 500)
   
 
    
