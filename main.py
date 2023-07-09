@@ -34,15 +34,6 @@ selected_stock = st.selectbox('Select dataset for prediction', stocks)
 n_years = st.slider('Years of prediction:',1,5)
 period = n_years*365
 
-forecast_method = st.selectbox("Select forecasting method", ["Prophet","ARIMA","SARIMAX","LSTM"])
-
-if forecast_method=="ARIMA" or forecast_method=="SARIMAX" :
-    p = st.number_input('Enter value of p', min_value=0, step=1)
-    d = st.number_input('Enter value of d', min_value=0, step=1)
-    q = st.number_input('Enter value of q', min_value=0, step=1)
-
-if  forecast_method=="SARIMAX" :
-     s = st.number_input('Enter value of seasonal order', min_value=1,max_value =12, step=1)
 
 @st.cache_data(persist=True)
 
@@ -74,139 +65,27 @@ def plot_raw_data():
 plot_raw_data()
 
 
-if forecast_method == "LSTM":
-    def df_to_x_y(df, window_size):
-        df_as_np = df.to_numpy()
-        x=[]
-        y=[]
-        for i in range(len(df_as_np)-window_size):
-            row = [[a] for a in df_as_np[i:i+window_size]]
-            x.append(row)
-            label = df_as_np[i+window_size]
-            y.append(label)
-        return np.array(x), np.array(y)
-    x, y = df_to_x_y(data['Close'], 10)
-  
 
    
-    # Building and training the LSTM model
-    lstm = Sequential()
-    lstm.add(LSTM(units=50, return_sequences=True,input_shape=(10,1)))
-    lstm.add(LSTM(20))
-    lstm.add(Dense(10,'relu'))
-    lstm.add(Dense(5,'relu'))
-    lstm.add(Dense(1,'linear'))
-    lstm.compile(loss="mean_squared_error", optimizer="adam")
-
-
-    lstm.fit(x, y, epochs=10)
-    # Predicting with the LSTM model
-    future_period = period
-    future_dates = pd.date_range(start=data['Date'].iloc[-1] + pd.Timedelta(days=1), periods=future_period, freq='D')
-    
-    # Prepare input data for future forecasting
-    future_window = data['Close'].tail(period).to_numpy().reshape(1, period, 1)
-    
-    # Use LSTM model to forecast future stock values
-    forecast = lstm.predict(future_window).flatten()
-    
-    # Adjust arrays to match the same length
-    if len(future_dates) > len(forecast):
-        future_dates = future_dates[:len(forecast)]
-    elif len(forecast) > len(future_dates):
-        forecast = forecast[:len(future_dates)]
-    
-    # Create a new DataFrame for future forecast
-    forecast_data = pd.DataFrame({'Date': future_dates, 'Forecast': forecast})
-    
-    # Plot the future forecast
-    st.subheader("LSTM Future Forecast")
-    fig3 = go.Figure()
-    fig3.add_trace(go.Scatter(x=data['Date'], y=data['Close'], name="Actual"))
-    fig3.add_trace(go.Scatter(x=forecast_data['Date'], y=forecast_data['Forecast'], name="Forecast"))
-    fig3.layout.update(title_text="LSTM Future Forecast", xaxis_rangeslider_visible=True)
-    st.plotly_chart(fig3)
-    
-     
-    
-elif forecast_method == "Prophet":
-
     #Predict forecast with Prophet
-    df_train = data[["Date","Close"]]
-    df_train.dropna(inplace=True)
-    df_train = df_train.rename(columns={"Date":"ds","Close":"y"})
+ df_train = data[["Date","Close"]]
+df_train.dropna(inplace=True)
+df_train = df_train.rename(columns={"Date":"ds","Close":"y"})
     
-    m = Prophet()
-    m.fit(df_train)
-    future = m.make_future_dataframe(periods = period)
-    forecast = m.predict(future)
+m = Prophet()
+m.fit(df_train)
+future = m.make_future_dataframe(periods = period)
+forecast = m.predict(future)
     
-    #Show and plot forecast
-    st.subheader("Forecast Data")
-    st.write(forecast.tail())
+#Show and plot forecast
+st.subheader("Forecast Data")
+st.write(forecast.tail())
     
-    st.write(f'Forecast plot for{n_years} years')
-    fig1 = plot_plotly(m,forecast)
-    st.plotly_chart(fig1)
+st.write(f'Forecast plot for{n_years} years')
+fig1 = plot_plotly(m,forecast)
+st.plotly_chart(fig1)
     
-    st.write("Forecast components")
-    fig2 = m.plot_components(forecast)
-    st.write(fig2)
+st.write("Forecast components")
+fig2 = m.plot_components(forecast)
+st.write(fig2)
     
-else :
-    df_train_arima = data[["Date", "Close"]]
-    df_train_arima.dropna(inplace=True)
-    df_train_arima.reset_index(drop=True, inplace=True)
-    df_train_arima = df_train_arima.rename(columns={"Date": "ds", "Close": "y"})
-    if forecast_method=="ARIMA" :
-        model = ARIMA(df_train_arima["y"], order=(p, d, q))
-        model_fit = model.fit()
-        
-    else : 
-        model = SARIMAX(df_train_arima["y"], order=(p, d, q),seasonal_order=(p,d,q,s))
-        model_fit = model.fit()
-
-    forecast = model_fit.forecast(steps=len(df_train_arima))
-    st.subheader("Forecast Data")
-    st.write(forecast.tail())
-
-    # Plotting ARIMA forecast
-    st.subheader("ARIMA Forecast")
-    fig1 = go.Figure()
-    fig1.add_trace(go.Scatter(x=df_train_arima["ds"], y=df_train_arima["y"], name="Actual"))
-    fig1.add_trace(go.Scatter(x=pd.date_range(start=df_train_arima["ds"].max(), periods=period, freq='D'), y=forecast,
-                              name="ARIMA Forecast"))
-    fig1.layout.update(title_text="ARIMA Forecast", xaxis_rangeslider_visible=True)
-    st.plotly_chart(fig1)
-
-    # Residuals plot
-    residuals = model_fit.resid
-    fig2 = go.Figure()
-    fig2.add_trace(go.Scatter(x=df_train_arima["ds"], y=residuals, name="Residuals"))
-    fig2.layout.update(title_text="ARIMA Residuals", xaxis_rangeslider_visible=True)
-    st.plotly_chart(fig2)
-
-    # Decompose components
-    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive', period=period)
-
-    # Plot trend component
-    fig_trend = go.Figure()
-    fig_trend.add_trace(go.Scatter(x=df_train_arima["ds"], y=decomposed.trend, name="Trend"))
-    fig_trend.layout.update(title_text="Trend Component", xaxis_rangeslider_visible=True)
-    st.plotly_chart(fig_trend)
-
-    # Plot seasonal component
-    st.subheader("Seasonal Component")
-    fig_seasonal = go.Figure()
-    fig_seasonal.add_trace(go.Scatter(x=df_train_arima["ds"], y=decomposed.seasonal, name="Seasonal"))
-    fig_seasonal.update_layout(xaxis_tickformat="%b %d")  # Format x-axis as month and day
-    fig_seasonal.layout.update(title_text="Seasonal Component", xaxis_rangeslider_visible=True)
-    st.plotly_chart(fig_seasonal)
-
-    # Plot yearly component
-    st.subheader("Yearly Component")
-    fig_yearly = go.Figure()
-    fig_yearly.add_trace(go.Scatter(x=df_train_arima["ds"], y=decomposed.resid, name="Yearly"))
-    fig_yearly.update_layout(xaxis_tickformat="%b")  # Format x-axis as month
-    fig_yearly.layout.update(title_text="Yearly Component", xaxis_rangeslider_visible=True)
-    st.plotly_chart(fig_yearly)
