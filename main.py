@@ -90,6 +90,11 @@ if forecast_method == "LSTM":
     # Predicting with the LSTM model
     forecast_scaled = model.predict(X)
     forecast = scaler.inverse_transform(forecast_scaled)
+    
+    # Show and plot forecast
+    st.subheader("Forecast Data")
+    st.write(forecast.tail())
+
 
     # Plotting LSTM forecast
     st.subheader("LSTM Forecast")
