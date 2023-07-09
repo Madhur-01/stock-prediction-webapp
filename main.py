@@ -159,13 +159,26 @@ else :
     fig2.layout.update(title_text="ARIMA Residuals", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig2)
 
-    # Plotting ARIMA components
-    st.subheader("ARIMA Components")
-    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive', period=7)
-    trend = decomposed.trend
-    seasonal = decomposed.seasonal
-    fig3 = go.Figure()
-    fig3.add_trace(go.Scatter(x=df_train_arima["ds"], y=trend, name="Trend"))
-    fig3.add_trace(go.Scatter(x=df_train_arima["ds"], y=seasonal, name="Seasonal"))
-    fig3.layout.update(title_text="Weekly", xaxis_rangeslider_visible=True)
-    st.plotly_chart(fig3)
+     # Decompose components
+    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive')
+    
+    # Plot trend component
+    st.subheader("Trend Component")
+    fig_trend = go.Figure()
+    fig_trend.add_trace(go.Scatter(x=df_train_arima["ds"], y=decomposed.trend, name="Trend"))
+    fig_trend.layout.update(title_text="Trend Component", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig_trend)
+    
+    # Plot seasonal component
+    st.subheader("Seasonal Component")
+    fig_seasonal = go.Figure()
+    fig_seasonal.add_trace(go.Scatter(x=df_train_arima["ds"], y=decomposed.seasonal, name="Seasonal"))
+    fig_seasonal.layout.update(title_text="Seasonal Component", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig_seasonal)
+    
+    # Plot year component
+    st.subheader("Year Component")
+    fig_year = go.Figure()
+    fig_year.add_trace(go.Scatter(x=df_train_arima["ds"], y=decomposed.resid, name="Year"))
+    fig_year.layout.update(title_text="Year Component", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig_year)
