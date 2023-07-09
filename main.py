@@ -7,8 +7,8 @@ Created on Sat Jul  8 13:02:37 2023
 
 import streamlit as st
 from datetime import date
-import numpy
-import pandas
+import numpy as np
+import pandas as pd
 import yfinance as yf
 from prophet import Prophet
 from prophet.plot import plot_plotly
