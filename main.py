@@ -15,7 +15,7 @@ from prophet.plot import plot_plotly
 from plotly import graph_objs as go
 import sklearn
 import tensorflow
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler()
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 
