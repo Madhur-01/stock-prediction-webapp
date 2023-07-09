@@ -1,6 +1,6 @@
 pip == 23.1.2
 streamlit ==1.24.0
-numpy 
+numpy ==<compatible_version>
 pystan ==3.5.0
 prophet == 1.1.4
 yfinance == 0.2.22
