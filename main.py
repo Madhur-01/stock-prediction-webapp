@@ -101,7 +101,7 @@ if forecast_method == "LSTM":
 
     lstm.fit(x, y, epochs=1)
     # Predicting with the LSTM model
-    future = m.make_future_dataframe(periods = period)
+    future = lstm.make_future_dataframe(periods = period)
     forecast = lstm.predict(future).flatten()
 
     # Plotting LSTM forecast
