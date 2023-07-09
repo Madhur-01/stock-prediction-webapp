@@ -74,8 +74,9 @@ if forecast_method == "LSTM":
     df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
 
     # Preparing the data for LSTM input
-    X = df_train_lstm[["ds", "y_scaled"]].values
-    X[:, 0] = X[:, 0].astype(str)  # Convert Timestamp objects to string
+    X = df_train_lstm[["ds", "y_scaled"]].copy()
+    X["ds"] = X["ds"].dt.strftime("%Y-%m-%d")  # Convert Timestamp objects to string
+    X = X.values
     X = np.reshape(X, (X.shape[0], X.shape[1], 1))
 
     # Building and training the LSTM model
@@ -101,6 +102,7 @@ if forecast_method == "LSTM":
     fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=forecast[:, 0], name="LSTM Forecast"))
     fig3.layout.update(title_text="LSTM Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
+
 
 else:
 
