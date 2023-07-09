@@ -161,11 +161,11 @@ else :
 
     # Plotting ARIMA components
     st.subheader("ARIMA Components")
-    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive')
+    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive', period=7)
     trend = decomposed.trend
     seasonal = decomposed.seasonal
     fig3 = go.Figure()
     fig3.add_trace(go.Scatter(x=df_train_arima["ds"], y=trend, name="Trend"))
     fig3.add_trace(go.Scatter(x=df_train_arima["ds"], y=seasonal, name="Seasonal"))
-    fig3.layout.update(title_text="ARIMA Components", xaxis_rangeslider_visible=True)
+    fig3.layout.update(title_text="Weekly", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
