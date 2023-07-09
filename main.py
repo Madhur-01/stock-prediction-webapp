@@ -98,6 +98,33 @@ if forecast_method == "LSTM":
     fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=forecast[:, 0], name="LSTM Forecast"))
     fig3.layout.update(title_text="LSTM Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
+    
+        # Extracting trend component
+    trend = forecast[:, 0]
+    
+    # Extracting yearly component
+    yearly = forecast[:, 0] - trend
+    
+    # Extracting weekly component
+    weekly = forecast[:, 0] - trend - yearly
+    
+        # Plotting trend component
+    fig_trend = go.Figure()
+    fig_trend.add_trace(go.Scatter(x=df_train_lstm["ds"], y=trend, name="Trend"))
+    fig_trend.layout.update(title_text="Trend Component", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig_trend)
+    
+    # Plotting yearly component
+    fig_yearly = go.Figure()
+    fig_yearly.add_trace(go.Scatter(x=df_train_lstm["ds"], y=yearly, name="Yearly"))
+    fig_yearly.layout.update(title_text="Yearly Component", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig_yearly)
+    
+    # Plotting weekly component
+    fig_weekly = go.Figure()
+    fig_weekly.add_trace(go.Scatter(x=df_train_lstm["ds"], y=weekly, name="Weekly"))
+    fig_weekly.layout.update(title_text="Weekly Component", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig_weekly)
 
 else:
 
