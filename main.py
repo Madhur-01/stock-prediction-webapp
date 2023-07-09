@@ -80,12 +80,14 @@ if forecast_method == "LSTM":
     # Building and training the LSTM model
     model = Sequential()
     model.add(LSTM(units=50, input_shape=(1, 1)))
-    model.add(Dense(1))
+    lstm.add(Dense(10,'relu'))
+    lstm.add(Dense(5,'relu'))
+    lstm.add(Dense(1,'linear'))
     model.compile(loss="mean_squared_error", optimizer="adam")
 
     y_scaled = df_train_lstm["y_scaled"].values.astype('float32')  # Convert y_scaled to float32
 
-    model.fit(X, y_scaled, epochs=10, batch_size=16, verbose=0)
+    model.fit(X, y_scaled, epochs=50, batch_size=20, verbose=0)
 
     # Predicting with the LSTM model
     forecast_scaled = model.predict(X)
