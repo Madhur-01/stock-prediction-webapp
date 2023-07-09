@@ -103,7 +103,7 @@ if forecast_method == "LSTM":
     st.plotly_chart(fig3)
     
     
-else if forecast_method == "Prophet":
+elseif forecast_method == "Prophet":
 
     #Predict forecast with Prophet
     df_train = data[["Date","Close"]]
