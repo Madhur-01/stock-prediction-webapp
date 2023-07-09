@@ -84,7 +84,6 @@ if forecast_method == "LSTM":
     model.add(LSTM(units=50))
     model.add(Dense(1))
     model.compile(loss="mean_squared_error", optimizer="adam")
-    X = X.astype('float32')  # Convert X to float32 data type
     y_scaled = df_train_lstm["y_scaled"].values.astype('float32')  # Convert y_scaled to float32
 
     model.fit(X, y_scaled, epochs=10, batch_size=16, verbose=0)
