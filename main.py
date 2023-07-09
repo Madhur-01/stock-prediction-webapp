@@ -101,7 +101,7 @@ if forecast_method == "LSTM":
 
     lstm.fit(x, y, epochs=10)
     # Predicting with the LSTM model
-    forecast_scaled = lstm.predict(X).flatten()
+    forecast_scaled = lstm.predict(x).flatten()
 
     # Plotting LSTM forecast
     st.subheader("LSTM Forecast")
