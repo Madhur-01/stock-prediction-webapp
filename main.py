@@ -91,7 +91,6 @@ if forecast_method == "LSTM":
     forecast_scaled = model.predict(X)
     forecast = scaler.inverse_transform(forecast_scaled)
 
-
     # Plotting LSTM forecast
     st.subheader("LSTM Forecast")
     fig3 = go.Figure()
@@ -99,7 +98,6 @@ if forecast_method == "LSTM":
     fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=forecast[:, 0], name="LSTM Forecast"))
     fig3.layout.update(title_text="LSTM Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
-
 
 else:
 
