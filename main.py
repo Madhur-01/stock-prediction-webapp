@@ -18,6 +18,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
+from statsmodels.tsa.arima.model import ARIMA
 
 START = "2015-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
@@ -31,7 +32,7 @@ selected_stock = st.selectbox('Select dataset for prediction', stocks)
 n_years = st.slider('Years of prediction:',1,5)
 period = n_years*365
 
-forecast_method = st.selectbox("Select forecasting method", ["Prophet", "LSTM"])
+forecast_method = st.selectbox("Select forecasting method", ["Prophet","ARIMA","LSTM"])
 
 @st.cache_data(persist=True)
 
@@ -102,7 +103,7 @@ if forecast_method == "LSTM":
     st.plotly_chart(fig3)
     
     
-else:
+else if forecast_method == "Prophet":
 
     #Predict forecast with Prophet
     df_train = data[["Date","Close"]]
@@ -125,6 +126,27 @@ else:
     st.write("Forecast components")
     fig2 = m.plot_components(forecast)
     st.write(fig2)
+    
+else :
+    df_train_arima = data[["Date", "Close"]]
+    df_train_arima.dropna(inplace=True)
+    df_train_arima.reset_index(drop=True, inplace=True)
+    df_train_arima = df_train_arima.rename(columns={"Date": "ds", "Close": "y"})
+
+    model = ARIMA(df_train_arima["y"], order=(1, 1, 1))
+    model_fit = model.fit()
+
+    forecast = model_fit.forecast(steps=len(df_train_arima))
+    #Show and plot forecast
+    st.subheader("Forecast Data")
+    st.write(forecast.tail())
+    
+    st.subheader("ARIMA Forecast")
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df_train_arima["ds"], y=df_train_arima["y"], name="Actual"))
+    fig.add_trace(go.Scatter(x=df_train_arima["ds"], y=forecast, name="ARIMA Forecast"))
+    fig.layout.update(title_text="ARIMA Forecast", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig)
     
 
 
