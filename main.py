@@ -138,10 +138,9 @@ else :
     model_fit = model.fit()
 
     forecast = model_fit.forecast(steps=len(df_train_arima))
-    #Show and plot forecast
     st.subheader("Forecast Data")
     st.write(forecast.tail())
-    
+
     # Plotting ARIMA forecast
     st.subheader("ARIMA Forecast")
     fig1 = go.Figure()
@@ -152,23 +151,21 @@ else :
     st.plotly_chart(fig1)
 
     # Residuals plot
-    #st.subheader("Residuals")
     residuals = model_fit.resid
     fig2 = go.Figure()
     fig2.add_trace(go.Scatter(x=df_train_arima["ds"], y=residuals, name="Residuals"))
     fig2.layout.update(title_text="ARIMA Residuals", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig2)
 
-     # Decompose components
-    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive',period=period)
-    
+    # Decompose components
+    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive')
+
     # Plot trend component
-    #st.subheader("Trend Component")
     fig_trend = go.Figure()
     fig_trend.add_trace(go.Scatter(x=df_train_arima["ds"], y=decomposed.trend, name="Trend"))
     fig_trend.layout.update(title_text="Trend Component", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig_trend)
-    
+
     # Plot seasonal component
     st.subheader("Seasonal Component")
     fig_seasonal = go.Figure()
@@ -176,7 +173,7 @@ else :
     fig_seasonal.update_layout(xaxis_tickformat="%b %d")  # Format x-axis as month and day
     fig_seasonal.layout.update(title_text="Seasonal Component", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig_seasonal)
-    
+
     # Plot yearly component
     st.subheader("Yearly Component")
     fig_yearly = go.Figure()
