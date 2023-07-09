@@ -32,12 +32,14 @@ period = n_years*365
 
 forecast_method = st.selectbox("Select forecasting method", ["Prophet", "LSTM"])
 
-@st.cache_data()
+@st.cache_data(persist=True, allow_output_mutation=True)
 
 def load_data(ticker):
-    data = yf.download(ticker,start =START,end = TODAY)
-    data.reset_index(inplace = True)
+    data = yf.download(ticker, start=START, end=TODAY)
+    data = data.copy()  # Make a copy of the DataFrame
+    data.reset_index(inplace=True)
     return data
+
 
 data_load_state = st.text("Loading data....")
 try:
