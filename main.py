@@ -20,7 +20,7 @@ from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 import statsmodels.api as sm
 from statsmodels.tsa.arima.model import ARIMA
-from statsmodels.tsa.arima.model import SARIMAX
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 START = "2015-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
