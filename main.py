@@ -73,6 +73,7 @@ if forecast_method == "LSTM":
 
     # Preparing the data for LSTM input
     X = df_train_lstm[["ds", "y"]].values
+    y = df_train_lstm["y"].values
     X = np.reshape(X, (X.shape[0], X.shape[1], 1))
 
     # Building and training the LSTM model
@@ -81,7 +82,7 @@ if forecast_method == "LSTM":
     model.add(LSTM(units=50))
     model.add(Dense(1))
     model.compile(loss="mean_squared_error", optimizer="adam")
-    model.fit(X, df_train_lstm["y"], epochs=10, batch_size=16, verbose=0)
+    model.fit(X,y, epochs=10, batch_size=16, verbose=0)
 
     # Predicting with the LSTM model
     forecast_scaled = model.predict(X)
