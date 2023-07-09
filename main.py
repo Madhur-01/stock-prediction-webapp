@@ -98,7 +98,6 @@ if forecast_method == "LSTM":
     lstm.add(Dense(1,'linear'))
     lstm.compile(loss="mean_squared_error", optimizer="adam")
 
-    y_scaled = df_train_lstm["y_scaled"].values.astype('float32')  # Convert y_scaled to float32
 
     lstm.fit(x, y, epochs=10,batch = 100)
     # Predicting with the LSTM model
