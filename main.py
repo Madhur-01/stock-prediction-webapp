@@ -160,7 +160,7 @@ else :
     st.plotly_chart(fig2)
 
      # Decompose components
-    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive',period=365)
+    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive',period=n_years)
     
     # Plot trend component
     #st.subheader("Trend Component")
@@ -171,7 +171,7 @@ else :
     
     # Plot seasonal component
     #st.subheader("Seasonal Component")
-    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive',period=30)
+    
     fig_seasonal = go.Figure()
     fig_seasonal.add_trace(go.Scatter(x=df_train_arima["ds"], y=decomposed.seasonal, name="Seasonal"))
     fig_seasonal.layout.update(title_text="Seasonal Component", xaxis_rangeslider_visible=True)
@@ -179,7 +179,6 @@ else :
     
     # Plot year component
     #st.subheader("Year Component")
-    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive',period=365)
     fig_year = go.Figure()
     fig_year.add_trace(go.Scatter(x=df_train_arima["ds"], y=decomposed.resid, name="Year"))
     fig_year.layout.update(title_text="Year Component", xaxis_rangeslider_visible=True)
