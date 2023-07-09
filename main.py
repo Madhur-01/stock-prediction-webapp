@@ -108,7 +108,7 @@ if forecast_method == "LSTM":
     st.subheader("LSTM Forecast")
     fig3 = go.Figure()
     fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=df_train_lstm["y"], name="Actual"))
-    fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=forecast[:, 0], name="LSTM Forecast"))
+    fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=forecast, name="LSTM Forecast"))
     fig3.layout.update(title_text="LSTM Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
     
