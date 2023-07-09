@@ -75,39 +75,40 @@ plot_raw_data()
 
 
 if forecast_method == "LSTM":
-    df_train_lstm = data[["Date", "Close"]]
-    df_train_lstm.dropna(inplace=True)
-    df_train_lstm.reset_index(drop=True, inplace=True)
-    df_train_lstm = df_train_lstm.rename(columns={"Date": "ds", "Close": "y"})
+    def df_to_x_y(df, window_size):
+        df_as_np = df.to_numpy()
+        x=[]
+        y=[]
+        for i in range(len(df_as_np)-window_size):
+            row = [[a] for a in df_as_np[i:i+window_size]]
+            x.append(row)
+            label = df_as_np[i+window_size]
+            y.append(label)
+        return np.array(x), np.array(y)
+    x, y = df_to_x_y(df['Close'], 500)
+  
 
-    # Scaling the data
-    scaler = MinMaxScaler(feature_range=(0, 1))
-    df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
-
-    # Preparing the data for LSTM input
-    X = df_train_lstm["y_scaled"].values
-    X = np.reshape(X, (X.shape[0], 1, 1))
-
+   
     # Building and training the LSTM model
-    model = Sequential()
-    model.add(LSTM(units=50, input_shape=(1, 1)))
-    model.add(Dense(10,'relu'))
-    model.add(Dense(5,'relu'))
-    model.add(Dense(1,'linear'))
-    model.compile(loss="mean_squared_error", optimizer="adam")
+    lstm = Sequential()
+    lstm.add(InputLayer((500,1)))
+    lstm.add(LSTM(20))
+    lstm.add(Dense(10,'relu'))
+    lstm.add(Dense(5,'relu'))
+    lstm.add(Dense(1,'linear'))
+    lstm.compile(loss="mean_squared_error", optimizer="adam")
 
     y_scaled = df_train_lstm["y_scaled"].values.astype('float32')  # Convert y_scaled to float32
 
-    model.fit(X, y_scaled, epochs=50, batch_size=20, verbose=0)
-
+    lstm.fit(x, y, epochs=10,batch = 100)
     # Predicting with the LSTM model
-    forecast_scaled = model.predict(X)
-    forecast = scaler.inverse_transform(forecast_scaled)
-    forecast = forecast.flatten()
+    forecast_scaled = model.predict(X).flatten()
 
     # Plotting LSTM forecast
     st.subheader("LSTM Forecast")
     fig3 = go.Figure()
+    df_train_lstm = data[["Date", "Close"]]
+    df_train_lstm = df_train_lstm.rename(columns={"Date":"ds","Close":"y"})
     fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=df_train_lstm["y"], name="Actual"))
     fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=forecast, name="LSTM Forecast"))
     fig3.layout.update(title_text="LSTM Forecast", xaxis_rangeslider_visible=True)
