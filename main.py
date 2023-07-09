@@ -99,7 +99,7 @@ if forecast_method == "LSTM":
     lstm.compile(loss="mean_squared_error", optimizer="adam")
 
 
-    lstm.fit(x, y, epochs=10,batch = 100)
+    lstm.fit(x, y, epochs=10)
     # Predicting with the LSTM model
     forecast_scaled = model.predict(X).flatten()
 
