@@ -35,6 +35,11 @@ period = n_years*365
 
 forecast_method = st.selectbox("Select forecasting method", ["Prophet","ARIMA","LSTM"])
 
+if forecast_method=="ARIMA" :
+    p = st.number_input('Enter value of p')
+    d = st.number_input('Enter value of d')
+    q = st.number_input('Enter value of q')
+
 @st.cache_data(persist=True)
 
 def load_data(ticker):
@@ -134,7 +139,7 @@ else :
     df_train_arima.reset_index(drop=True, inplace=True)
     df_train_arima = df_train_arima.rename(columns={"Date": "ds", "Close": "y"})
 
-    model = ARIMA(df_train_arima["y"], order=(15, 1, 15))
+    model = ARIMA(df_train_arima["y"], order=(p, d, q))
     model_fit = model.fit()
 
     forecast = model_fit.forecast(steps=len(df_train_arima))
