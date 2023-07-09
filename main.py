@@ -99,7 +99,7 @@ if forecast_method == "LSTM":
     fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=forecast[:, 0], name="LSTM Forecast"))
     fig3.layout.update(title_text="LSTM Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
-    
+
     # Calculate and plot the trend component
     trend_actual = df_train_lstm["y"].values
     trend_forecast = forecast[:, 0]
