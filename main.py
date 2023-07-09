@@ -74,19 +74,15 @@ if forecast_method == "LSTM":
     df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
 
     # Preparing the data for LSTM input
-    X = df_train_lstm[["ds", "y_scaled"]].copy()
-    X["ds"] = X["ds"].dt.strftime("%Y-%m-%d")  # Convert Timestamp objects to string
-    X = X.values
-    X = np.reshape(X, (X.shape[0], X.shape[1], 1))
+    X = df_train_lstm["y_scaled"].values
+    X = np.reshape(X, (X.shape[0], 1, 1))
 
     # Building and training the LSTM model
     model = Sequential()
-    model.add(LSTM(units=50, return_sequences=True, input_shape=(2, 1)))
-    model.add(LSTM(units=50))
+    model.add(LSTM(units=50, input_shape=(1, 1)))
     model.add(Dense(1))
     model.compile(loss="mean_squared_error", optimizer="adam")
 
-    X = X.astype('float32')  # Convert X to float32 data type
     y_scaled = df_train_lstm["y_scaled"].values.astype('float32')  # Convert y_scaled to float32
 
     model.fit(X, y_scaled, epochs=10, batch_size=16, verbose=0)
@@ -102,7 +98,6 @@ if forecast_method == "LSTM":
     fig3.add_trace(go.Scatter(x=df_train_lstm["ds"], y=forecast[:, 0], name="LSTM Forecast"))
     fig3.layout.update(title_text="LSTM Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
-
 
 else:
 
