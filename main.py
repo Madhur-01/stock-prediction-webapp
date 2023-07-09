@@ -99,18 +99,20 @@ if forecast_method == "LSTM":
     fig3.layout.update(title_text="LSTM Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
     
-       from statsmodels.tsa.seasonal import seasonal_decompose
+       # Extracting components
+   trend = forecast.squeeze()
+   residuals = df_train_lstm["y"] - trend
+   weekly_seasonality = residuals.groupby(df_train_lstm["ds"].dt.weekday).mean()
+   yearly_seasonality = residuals.groupby(df_train_lstm["ds"].dt.dayofyear).mean()
+   
+    st.subheader("LSTM Components")
+    fig4 = go.Figure()
+    fig4.add_trace(go.Scatter(x=df_train_lstm["ds"], y=trend, name="Trend"))
+    fig4.add_trace(go.Scatter(x=df_train_lstm["ds"], y=weekly_seasonality, name="Weekly Seasonality"))
+    fig4.add_trace(go.Scatter(x=df_train_lstm["ds"], y=yearly_seasonality, name="Yearly Seasonality"))
+    fig4.layout.update(title_text="LSTM Components", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig4)
 
-    # Perform seasonal decomposition
-    result = seasonal_decompose(df_train_lstm["y"], model="additive", period=365)
-    
-    # Plotting trend, seasonal, and residual components
-    fig_decomposition = go.Figure()
-    fig_decomposition.add_trace(go.Scatter(x=df_train_lstm["ds"], y=result.trend, name="Trend"))
-    fig_decomposition.add_trace(go.Scatter(x=df_train_lstm["ds"], y=result.seasonal, name="Seasonal"))
-    fig_decomposition.add_trace(go.Scatter(x=df_train_lstm["ds"], y=result.resid, name="Residual"))
-    fig_decomposition.layout.update(title_text="Time Series Decomposition", xaxis_rangeslider_visible=True)
-    st.plotly_chart(fig_decomposition)
 
 else:
 
