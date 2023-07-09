@@ -87,7 +87,7 @@ if forecast_method == "LSTM":
     X = X.astype('float32')  # Convert X to float32 data type
     y_scaled = df_train_lstm["y_scaled"].values.astype('float32')  # Convert y_scaled to float32
 
-   model.fit(X, y_scaled, epochs=10, batch_size=16, verbose=0)
+    model.fit(X, y_scaled, epochs=10, batch_size=16, verbose=0)
     # Predicting with the LSTM model
     forecast_scaled = model.predict(X)
     forecast = scaler.inverse_transform(forecast_scaled)
