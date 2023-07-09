@@ -75,6 +75,7 @@ if forecast_method == "LSTM":
 
     # Preparing the data for LSTM input
     X = df_train_lstm[["ds", "y_scaled"]].values
+    X[:, 0] = X[:, 0].astype(str)  # Convert Timestamp objects to string
     X = np.reshape(X, (X.shape[0], X.shape[1], 1))
 
     # Building and training the LSTM model
