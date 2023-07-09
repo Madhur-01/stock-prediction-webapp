@@ -18,6 +18,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
+import statsmodels.api as sm
 from statsmodels.tsa.arima.model import ARIMA
 
 START = "2015-01-01"
