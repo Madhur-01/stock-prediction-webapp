@@ -17,7 +17,7 @@ import sklearn
 import tensorflow
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
-
+from sklearn.preprocessing import MinMaxScaler
 
 START = "2015-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
