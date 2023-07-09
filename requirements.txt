@@ -1,7 +1,7 @@
 pip == 22.0
 streamlit ==1.24.0
 numpy == 1.20.3
-pystan
+pystan ==3.5.0
 prophet == 1.1.4
 yfinance == 0.2.22
 plotly >= 5.0.0
