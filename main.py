@@ -101,8 +101,7 @@ if forecast_method == "LSTM":
 
     lstm.fit(x, y, epochs=10)
     # Predicting with the LSTM model
-    future =  pd.date_range(start=data["Date"].iloc[-1], periods=period, freq="D")
-    forecast = lstm.predict(future).flatten()
+    forecast = lstm.predict(x).flatten()
 
     # Plotting LSTM forecast
     st.subheader("LSTM Forecast")
