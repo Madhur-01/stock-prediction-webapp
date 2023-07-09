@@ -32,7 +32,7 @@ period = n_years*365
 
 forecast_method = st.selectbox("Select forecasting method", ["Prophet", "LSTM"])
 
-@st.cache(persist=True, allow_output_mutation=True)
+@st.cache_data(persist=True, allow_output_mutation=True)
 
 def load_data(ticker):
     data = yf.download(ticker,start =START,end = TODAY)
