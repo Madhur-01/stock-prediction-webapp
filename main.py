@@ -71,11 +71,11 @@ if forecast_method == "LSTM":
     # Scaling the data
     scaler = MinMaxScaler(feature_range=(0, 1))
     df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
-
+    df_train_lstm["y_scaled"] = df_train_lstm["y_scaled"].astype(float)
     # Preparing the data for LSTM input
     X = df_train_lstm[["ds", "y_scaled"]].copy()
     X["ds"] = pd.to_datetime(X["ds"])  # Convert the "ds" column to datetime
-    X["y_scaled"] = X["y_scaled"].astype(float)  # Convert "y_scaled" to float
+   # X["y_scaled"] = X["y_scaled"].astype(float)  # Convert "y_scaled" to float
     X = X.values.reshape(-1, 2, 1)
 
      # Building and training the LSTM model
