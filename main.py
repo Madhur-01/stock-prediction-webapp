@@ -102,17 +102,23 @@ if forecast_method == "LSTM":
     lstm.fit(x, y, epochs=10)
     # Predicting with the LSTM model
     future_period = n_years * 365
-    future_dates = pd.date_range(start=data['Date'].iloc[-1], periods=future_period + 1, freq='D')[1:]
-
+    future_dates = pd.date_range(start=data['Date'].iloc[-1] + pd.Timedelta(days=1), periods=future_period, freq='D')
+    
     # Prepare input data for future forecasting
     future_window = data['Close'].tail(10).to_numpy().reshape(1, -1, 1)
-
+    
     # Use LSTM model to forecast future stock values
     forecast = lstm.predict(future_window).flatten()
-
+    
+    # Adjust arrays to match the same length
+    if len(future_dates) > len(forecast):
+        future_dates = future_dates[:len(forecast)]
+    elif len(forecast) > len(future_dates):
+        forecast = forecast[:len(future_dates)]
+    
     # Create a new DataFrame for future forecast
     forecast_data = pd.DataFrame({'Date': future_dates, 'Forecast': forecast})
-
+    
     # Plot the future forecast
     st.subheader("LSTM Future Forecast")
     fig3 = go.Figure()
@@ -120,8 +126,8 @@ if forecast_method == "LSTM":
     fig3.add_trace(go.Scatter(x=forecast_data['Date'], y=forecast_data['Forecast'], name="Forecast"))
     fig3.layout.update(title_text="LSTM Future Forecast", xaxis_rangeslider_visible=True)
     st.plotly_chart(fig3)
-
- 
+    
+     
     
 elif forecast_method == "Prophet":
 
