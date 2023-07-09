@@ -141,46 +141,30 @@ else :
     st.subheader("Forecast Data")
     st.write(forecast.tail())
     
+    # Plotting ARIMA forecast
     st.subheader("ARIMA Forecast")
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df_train_arima["ds"], y=df_train_arima["y"], name="Actual"))
-    fig.add_trace(go.Scatter(x=df_train_arima["ds"], y=forecast, name="ARIMA Forecast"))
-    fig.layout.update(title_text="ARIMA Forecast", xaxis_rangeslider_visible=True)
-    st.plotly_chart(fig)
-    
-    # Generate the forecast components
-    forecast_components = model_fit.get_forecast(steps=len(df_train_arima)).summary_frame()
-    
-    # Extract the forecasted values of the components
-    trend = forecast_components['trend']
-    seasonal = forecast_components['seasonal']
-    residuals = forecast_components['resid']
-    
-    # Create a DataFrame for the forecast components
-    df_components = pd.DataFrame({'Date': df_train_arima.index, 'Trend': trend, 'Seasonal': seasonal, 'Residuals': residuals})
-    
-    # Plot the forecast components
-    fig = go.Figure()
-    
-    # Plot the trend component
-    fig.add_trace(go.Scatter(x=df_components['Date'], y=df_components['Trend'], name='Trend'))
-    
-    # Plot the seasonal component
-    fig.add_trace(go.Scatter(x=df_components['Date'], y=df_components['Seasonal'], name='Seasonal'))
-    
-    # Plot the residual component
-    fig.add_trace(go.Scatter(x=df_components['Date'], y=df_components['Residuals'], name='Residuals'))
-    
-    # Update the layout
-    fig.update_layout(title='ARIMA Forecast Components', xaxis_rangeslider_visible=True)
-    
-    # Display the plot
-    st.plotly_chart(fig)
-    
+    fig1 = go.Figure()
+    fig1.add_trace(go.Scatter(x=df_train_arima["ds"], y=df_train_arima["y"], name="Actual"))
+    fig1.add_trace(go.Scatter(x=pd.date_range(start=df_train_arima["ds"].max(), periods=period, freq='D'), y=forecast,
+                              name="ARIMA Forecast"))
+    fig1.layout.update(title_text="ARIMA Forecast", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig1)
 
+    # Residuals plot
+    st.subheader("Residuals")
+    residuals = model_fit.resid
+    fig2 = go.Figure()
+    fig2.add_trace(go.Scatter(x=df_train_arima["ds"], y=residuals, name="Residuals"))
+    fig2.layout.update(title_text="ARIMA Residuals", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig2)
 
-
-
-
-
-
+    # Plotting ARIMA components
+    st.subheader("ARIMA Components")
+    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive')
+    trend = decomposed.trend
+    seasonal = decomposed.seasonal
+    fig3 = go.Figure()
+    fig3.add_trace(go.Scatter(x=df_train_arima["ds"], y=trend, name="Trend"))
+    fig3.add_trace(go.Scatter(x=df_train_arima["ds"], y=seasonal, name="Seasonal"))
+    fig3.layout.update(title_text="ARIMA Components", xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig3)
