@@ -101,7 +101,7 @@ if forecast_method == "LSTM":
 
     lstm.fit(x, y, epochs=10)
     # Predicting with the LSTM model
-    f future_period = n_years * 365
+    future_period = n_years * 365
     future_dates = pd.date_range(start=data['Date'].iloc[-1], periods=future_period + 1, freq='D')[1:]
 
     # Prepare input data for future forecasting
