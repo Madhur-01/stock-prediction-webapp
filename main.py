@@ -147,7 +147,7 @@ else :
         model_fit = model.fit()
         
     else : 
-        model = ARIMA(df_train_arima["y"], order=(p, d, q),seasonal_order=(p,d,q,s))
+        model = SARIMAX(df_train_arima["y"], order=(p, d, q),seasonal_order=(p,d,q,s))
         model_fit = model.fit()
 
     forecast = model_fit.forecast(steps=len(df_train_arima))
