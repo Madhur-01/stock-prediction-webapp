@@ -36,9 +36,9 @@ period = n_years*365
 forecast_method = st.selectbox("Select forecasting method", ["Prophet","ARIMA","LSTM"])
 
 if forecast_method=="ARIMA" :
-    p = st.number_input('Enter value of p')
-    d = st.number_input('Enter value of d')
-    q = st.number_input('Enter value of q')
+    p = st.number_input('Enter value of p', min_value=0, step=1)
+    d = st.number_input('Enter value of d', min_value=0, step=1)
+    q = st.number_input('Enter value of q', min_value=0, step=1)
 
 @st.cache_data(persist=True)
 
