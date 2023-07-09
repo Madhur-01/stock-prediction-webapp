@@ -158,7 +158,7 @@ else :
     st.plotly_chart(fig2)
 
     # Decompose components
-    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive',period = period)
+    decomposed = sm.tsa.seasonal_decompose(df_train_arima["y"], model='additive', period=period)
 
     # Plot trend component
     fig_trend = go.Figure()
