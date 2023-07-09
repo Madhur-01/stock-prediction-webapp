@@ -62,7 +62,15 @@ def plot_raw_data():
     
 plot_raw_data()
 
+df_train = load_data(selected_stock)[["Date", "Close"]]
+df_train.loc[:, "Date"] = pd.to_datetime(df_train["Date"])  # Convert 'Date' column to datetime type
+df_train.loc[:, "Close"] = pd.to_numeric(df_train["Close"])  # Convert 'Close' column to numeric type
+
+# ...
+
 if forecast_method == "LSTM":
+    df_train_lstm = df_train.copy()
+    df_train_lstm.reset_index(drop=True, inplace=True)
     df_train_lstm = data[["Date", "Close"]]
     df_train_lstm.dropna(inplace=True)
     df_train_lstm = df_train_lstm.rename(columns={"Date": "ds", "Close": "y"})
