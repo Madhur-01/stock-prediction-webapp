@@ -78,14 +78,16 @@ if forecast_method == "LSTM":
     X["y_scaled"] = X["y_scaled"].astype(float)  # Convert "y_scaled" to float
     X = X.values.reshape(-1, 2, 1)
 
-    # Building and training the LSTM model
+     # Building and training the LSTM model
     model = Sequential()
     model.add(LSTM(units=50, return_sequences=True, input_shape=(2, 1)))
     model.add(LSTM(units=50))
     model.add(Dense(1))
     model.compile(loss="mean_squared_error", optimizer="adam")
-    model.fit(X, df_train_lstm["y_scaled"].values, epochs=10, batch_size=16, verbose=0)
+    X = X.astype('float32')  # Convert X to float32 data type
+    y_scaled = df_train_lstm["y_scaled"].values.astype('float32')  # Convert y_scaled to float32
 
+   model.fit(X, y_scaled, epochs=10, batch_size=16, verbose=0)
     # Predicting with the LSTM model
     forecast_scaled = model.predict(X)
     forecast = scaler.inverse_transform(forecast_scaled)
