@@ -41,7 +41,7 @@ if forecast_method=="ARIMA" or forecast_method=="SARIMAX" :
     d = st.number_input('Enter value of d', min_value=0, step=1)
     q = st.number_input('Enter value of q', min_value=0, step=1)
 
- if  forecast_method=="SARIMAX" :
+if  forecast_method=="SARIMAX" :
      s = st.number_input('Enter value of seasonal order', min_value=1,max_value =12, step=1)
 
 @st.cache_data(persist=True)
