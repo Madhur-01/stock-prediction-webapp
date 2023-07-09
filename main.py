@@ -71,10 +71,10 @@ if forecast_method == "LSTM":
     # Scaling the data
     #df_train_lstm["y_scaled"] = scaler.fit_transform(df_train_lstm[["y"]])
 
-     # Preparing the data for LSTM input
+   # Preparing the data for LSTM input
     X = df_train_lstm[["ds", "y"]].values
     y = df_train_lstm["y"].values
-    #X = np.reshape(X, (X.shape[0], X.shape[1], 1))
+    X = np.reshape(X, (X.shape[0], X.shape[1], 1))
     
     # Building and training the LSTM model
     model = Sequential()
