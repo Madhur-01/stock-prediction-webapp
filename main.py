@@ -134,7 +134,7 @@ else :
     df_train_arima.reset_index(drop=True, inplace=True)
     df_train_arima = df_train_arima.rename(columns={"Date": "ds", "Close": "y"})
 
-    model = ARIMA(df_train_arima["y"], order=(1, 1, 1))
+    model = ARIMA(df_train_arima["y"], order=(15, 1, 15))
     model_fit = model.fit()
 
     forecast = model_fit.forecast(steps=len(df_train_arima))
