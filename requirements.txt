@@ -6,6 +6,7 @@ prophet == 1.1.4
 yfinance == 0.2.22
 plotly 
 pandas == 2.0.3
+headless = true
 
 
 
