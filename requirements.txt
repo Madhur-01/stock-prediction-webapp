@@ -7,6 +7,4 @@ yfinance == 0.2.22
 plotly 
 pandas == 2.0.3
 headless = true
-
-
-
+port = 8501
