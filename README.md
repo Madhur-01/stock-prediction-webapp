@@ -1,4 +1,4 @@
-# Stock-Prediction-Webapp
+# Real-Time Stock Forecasting Web App
 https://stock-prediction-webapp.streamlit.app/
 
 In this project, I developed a web app using Streamlit Cloud to accurately predict stock prices of different companies. The goal was to leverage real-time stock datasets obtained using the yfinance library, which allows easy access to financial data from Yahoo Finance. By utilizing this data, I aimed to provide users with reliable predictions for stocks such as Google, Amazon, and Microsoft.
