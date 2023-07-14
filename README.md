@@ -9,10 +9,10 @@ There are many different techniques designed specifically for dealig with time s
 
 Technologies used in this project-
 
-Python
-Numpy and Pandas 
-plotly for data visualization
-prophet for forecasting
-Google Colab, visual studio code and pycharm as IDE
-Python flask for http server
-Streamlit Cloud for UI
+1. Python
+2. Numpy and Pandas
+3. plotly for data visualization
+4. prophet for forecasting
+5. Google Colab, visual studio code and pycharm as IDE
+6. Python flask for http server
+7. Streamlit Cloud for UI
